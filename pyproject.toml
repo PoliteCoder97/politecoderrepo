@@ -1,0 +1,19 @@
+[project]
+name = "politecoderrepo"
+version = "0.1.0"
+description = "FastAPI service: scheduled README commits to GitHub via PyGithub and APScheduler"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "PyGithub>=2.2.0",
+    "apscheduler>=3.10.4",
+    "python-dotenv>=1.0.0",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["main", "github_service"]
