@@ -1,0 +1,43 @@
+# Appends a UTC timestamp line to README.md on branch `develop` and pushes.
+# Schedule uses UTC. Change the cron expression to pick a different daily time.
+# GitHub does not allow secrets/vars in `on.schedule.cron`; edit this file to retime.
+
+name: Daily README auto-commit
+
+on:
+  schedule:
+    # 03:00 UTC every day — same idea as SCHEDULE_HOUR=3, SCHEDULE_TIMEZONE=UTC
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-readme-commit
+  cancel-in-progress: false
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: develop
+          fetch-depth: 0
+
+      - name: Append timestamp and push
+        run: |
+          set -euo pipefail
+          TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          touch README.md
+          printf '\n<!-- auto-commit: %s -->\n' "${TS}" >> README.md
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "chore: automated README update ${TS}"
+          git push origin HEAD:develop
