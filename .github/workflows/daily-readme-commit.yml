@@ -32,8 +32,8 @@ jobs:
           TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
           touch README.md
           printf '\n<!-- auto-commit: %s -->\n' "${TS}" >> README.md
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "PoliteCoder97"
+          git config user.email "politecoder97@gmail.com"
           git add README.md
           if git diff --staged --quiet; then
             echo "No changes to commit."
